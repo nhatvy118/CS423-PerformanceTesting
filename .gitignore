@@ -1,0 +1,7 @@
+# Reports directory
+reports/
+
+# k6 temporary files
+*.log
+*.tmp
+
