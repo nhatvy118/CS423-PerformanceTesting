@@ -10,15 +10,9 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '1m', target: 8 },   // Ramp up to normal load: 8 users
-        { duration: '1m', target: 16 },  // Increase to moderate load: 16 users
-        { duration: '1m', target: 24 },  // Push to high load: 24 users
-        { duration: '1m', target: 32 },  // Stress level: 32 users
-        { duration: '1m', target: 32 },  // Hold stress: Maintain 32 users
-        { duration: '1m', target: 24 },  // Gradual ramp down: 24 users
-        { duration: '1m', target: 16 },  // Continue ramp down: 16 users
-        { duration: '1m', target: 8 },   // Return to normal: 8 users
-        { duration: '30s', target: 0 },  // Cool down: Ramp down to 0
+        { duration: '10s', target: 100 }, // Ramp up fast
+        { duration: '4m50s', target: 100 }, // Hold end-to-end 5 minutes
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testStatus',
     },
@@ -27,15 +21,9 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '1m', target: 8 },   // Ramp up to normal load: 8 users
-        { duration: '1m', target: 16 },  // Increase to moderate load: 16 users
-        { duration: '1m', target: 24 },  // Push to high load: 24 users
-        { duration: '1m', target: 32 },  // Stress level: 32 users
-        { duration: '1m', target: 32 },  // Hold stress: Maintain 32 users
-        { duration: '1m', target: 24 },  // Gradual ramp down: 24 users
-        { duration: '1m', target: 16 },  // Continue ramp down: 16 users
-        { duration: '1m', target: 8 },   // Return to normal: 8 users
-        { duration: '30s', target: 0 },  // Cool down: Ramp down to 0
+        { duration: '10s', target: 100 }, // Ramp up fast
+        { duration: '4m50s', target: 100 }, // Hold end-to-end 5 minutes
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testProducts',
     },
@@ -44,15 +32,9 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '1m', target: 8 },   // Ramp up to normal load: 8 users
-        { duration: '1m', target: 16 },  // Increase to moderate load: 16 users
-        { duration: '1m', target: 24 },  // Push to high load: 24 users
-        { duration: '1m', target: 32 },  // Stress level: 32 users
-        { duration: '1m', target: 32 },  // Hold stress: Maintain 32 users
-        { duration: '1m', target: 24 },  // Gradual ramp down: 24 users
-        { duration: '1m', target: 16 },  // Continue ramp down: 16 users
-        { duration: '1m', target: 8 },   // Return to normal: 8 users
-        { duration: '30s', target: 0 },  // Cool down: Ramp down to 0
+        { duration: '10s', target: 100 }, // Ramp up fast
+        { duration: '4m50s', target: 100 }, // Hold end-to-end 5 minutes
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testCategories',
     },
@@ -61,15 +43,9 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '1m', target: 8 },   // Ramp up to normal load: 8 users
-        { duration: '1m', target: 16 },  // Increase to moderate load: 16 users
-        { duration: '1m', target: 24 },  // Push to high load: 24 users
-        { duration: '1m', target: 32 },  // Stress level: 32 users
-        { duration: '1m', target: 32 },  // Hold stress: Maintain 32 users
-        { duration: '1m', target: 24 },  // Gradual ramp down: 24 users
-        { duration: '1m', target: 16 },  // Continue ramp down: 16 users
-        { duration: '1m', target: 8 },   // Return to normal: 8 users
-        { duration: '30s', target: 0 },  // Cool down: Ramp down to 0
+        { duration: '10s', target: 100 }, // Ramp up fast
+        { duration: '4m50s', target: 100 }, // Hold end-to-end 5 minutes
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testBrands',
     },
@@ -78,15 +54,9 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '1m', target: 8 },   // Ramp up to normal load: 8 users
-        { duration: '1m', target: 16 },  // Increase to moderate load: 16 users
-        { duration: '1m', target: 24 },  // Push to high load: 24 users
-        { duration: '1m', target: 32 },  // Stress level: 32 users
-        { duration: '1m', target: 32 },  // Hold stress: Maintain 32 users
-        { duration: '1m', target: 24 },  // Gradual ramp down: 24 users
-        { duration: '1m', target: 16 },  // Continue ramp down: 16 users
-        { duration: '1m', target: 8 },   // Return to normal: 8 users
-        { duration: '30s', target: 0 },  // Cool down: Ramp down to 0
+        { duration: '10s', target: 100 }, // Ramp up fast
+        { duration: '4m50s', target: 100 }, // Hold end-to-end 5 minutes
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testRegister',
     },
@@ -95,15 +65,9 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '1m', target: 8 },   // Ramp up to normal load: 8 users
-        { duration: '1m', target: 16 },  // Increase to moderate load: 16 users
-        { duration: '1m', target: 24 },  // Push to high load: 24 users
-        { duration: '1m', target: 32 },  // Stress level: 32 users
-        { duration: '1m', target: 32 },  // Hold stress: Maintain 32 users
-        { duration: '1m', target: 24 },  // Gradual ramp down: 24 users
-        { duration: '1m', target: 16 },  // Continue ramp down: 16 users
-        { duration: '1m', target: 8 },   // Return to normal: 8 users
-        { duration: '30s', target: 0 },  // Cool down: Ramp down to 0
+        { duration: '10s', target: 100 }, // Ramp up fast
+        { duration: '4m50s', target: 100 }, // Hold end-to-end 5 minutes
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testLogin',
     },

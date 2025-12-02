@@ -6,83 +6,71 @@ import { COMMON_HEADERS, getUrl, COMMON_THRESHOLDS } from './config.js';
 export const options = {
   scenarios: {
     // Test /status endpoint separately
-    status_endpoint: {
-      executor: 'ramping-vus',
-      startVUs: 0,
-      stages: [
-        { duration: '30s', target: 5 },   // Ramp up to 5 users
-        { duration: '1m', target: 12 },   // Ramp up to 12 users
-        { duration: '2m', target: 12 },   // Stay at 12 users (sustained load)
-        { duration: '30s', target: 5 },   // Ramp down to 5 users
-        { duration: '30s', target: 0 },   // Ramp down to 0
-      ],
-      exec: 'testStatus',
-    },
+    // status_endpoint: {
+    //   executor: 'ramping-vus',
+    //   startVUs: 0,
+    //   stages: [
+    //     { duration: '30s', target: 20 },  // Ramp up
+    //     { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+    //     { duration: '10s', target: 0 }, // Optional ramp-down
+    //   ],
+    //   exec: 'testStatus',
+    // },
     // Test /products endpoint separately
     products_endpoint: {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 5 },   // Ramp up to 5 users
-        { duration: '1m', target: 12 },   // Ramp up to 12 users
-        { duration: '2m', target: 12 },   // Stay at 12 users (sustained load)
-        { duration: '30s', target: 5 },   // Ramp down to 5 users
-        { duration: '30s', target: 0 },   // Ramp down to 0
+        { duration: '30s', target: 20 },  // Ramp up
+        { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+        { duration: '10s', target: 0 }, // Optional ramp-down
       ],
       exec: 'testProducts',
     },
     // Test /categories endpoint separately
-    categories_endpoint: {
-      executor: 'ramping-vus',
-      startVUs: 0,
-      stages: [
-        { duration: '30s', target: 5 },   // Ramp up to 5 users
-        { duration: '1m', target: 12 },   // Ramp up to 12 users
-        { duration: '2m', target: 12 },   // Stay at 12 users (sustained load)
-        { duration: '30s', target: 5 },   // Ramp down to 5 users
-        { duration: '30s', target: 0 },   // Ramp down to 0
-      ],
-      exec: 'testCategories',
-    },
-    // Test /brands endpoint separately
-    brands_endpoint: {
-      executor: 'ramping-vus',
-      startVUs: 0,
-      stages: [
-        { duration: '30s', target: 5 },   // Ramp up to 5 users
-        { duration: '1m', target: 12 },   // Ramp up to 12 users
-        { duration: '2m', target: 12 },   // Stay at 12 users (sustained load)
-        { duration: '30s', target: 5 },   // Ramp down to 5 users
-        { duration: '30s', target: 0 },   // Ramp down to 0
-      ],
-      exec: 'testBrands',
-    },
-    // Test /users/register endpoint separately
-    register_endpoint: {
-      executor: 'ramping-vus',
-      startVUs: 0,
-      stages: [
-        { duration: '30s', target: 5 },   // Ramp up to 5 users
-        { duration: '1m', target: 12 },   // Ramp up to 12 users
-        { duration: '2m', target: 12 },   // Stay at 12 users (sustained load)
-        { duration: '30s', target: 5 },   // Ramp down to 5 users
-        { duration: '30s', target: 0 },   // Ramp down to 0
-      ],
-      exec: 'testRegister',
-    },
-    // Test /users/login endpoint separately
-    login_endpoint: {
-      executor: 'ramping-vus',
-      startVUs: 0,
-      stages: [
-        { duration: '30s', target: 5 },   // Ramp up to 5 users
-        { duration: '1m', target: 12 },   // Ramp up to 12 users
-        { duration: '2m', target: 12 },   // Stay at 12 users (sustained load)
-        { duration: '30s', target: 5 },   // Ramp down to 5 users
-        { duration: '30s', target: 0 },   // Ramp down to 0
-      ],
-      exec: 'testLogin',
-    },
+  //   categories_endpoint: {
+  //     executor: 'ramping-vus',
+  //     startVUs: 0,
+  //     stages: [
+  //       { duration: '30s', target: 20 },  // Ramp up
+  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+  //       { duration: '10s', target: 0 }, // Optional ramp-down
+  //     ],
+  //     exec: 'testCategories',
+  //   },
+  //   // Test /brands endpoint separately
+  //   brands_endpoint: {
+  //     executor: 'ramping-vus',
+  //     startVUs: 0,
+  //     stages: [
+  //       { duration: '30s', target: 20 },  // Ramp up
+  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+  //       { duration: '10s', target: 0 }, // Optional ramp-down
+  //     ],
+  //     exec: 'testBrands',
+  //   },
+  //   // Test /users/register endpoint separately
+  //   register_endpoint: {
+  //     executor: 'ramping-vus',
+  //     startVUs: 0,
+  //     stages: [
+  //       { duration: '30s', target: 20 },  // Ramp up
+  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+  //       { duration: '10s', target: 0 }, // Optional ramp-down
+  //     ],
+  //     exec: 'testRegister',
+  //   },
+  //   // Test /users/login endpoint separately
+  //   login_endpoint: {
+  //     executor: 'ramping-vus',
+  //     startVUs: 0,
+  //     stages: [
+  //       { duration: '30s', target: 20 },  // Ramp up
+  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+  //       { duration: '10s', target: 0 }, // Optional ramp-down
+  //     ],
+  //     exec: 'testLogin',
+  //   },
   },
   thresholds: {
     ...COMMON_THRESHOLDS,
@@ -140,7 +128,7 @@ export function testCategories() {
   
   check(response, {
     'categories returns 200': (r) => r.status === 200,
-    'categories response time < 1000ms': (r) => r.timings.duration < 1000,
+    'categories response time < 800ms': (r) => r.timings.duration < 800,
   });
   
   sleep(1);
@@ -154,7 +142,7 @@ export function testBrands() {
   
   check(response, {
     'brands returns 200': (r) => r.status === 200,
-    'brands response time < 1000ms': (r) => r.timings.duration < 1000,
+    'brands response time < 800ms': (r) => r.timings.duration < 800,
   });
   
   sleep(1);

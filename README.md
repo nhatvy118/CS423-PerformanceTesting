@@ -2,18 +2,24 @@
 
 This folder contains comprehensive k6 performance tests for the Sprint5 API endpoints.
 
-## Prerequisites
+## Quick Start
 
-### Install k6
+### Step 1: Install k6
 
+Choose the installation method for your operating system:
+
+**macOS:**
 ```bash
-# macOS
 brew install k6
+```
 
-# Windows (using Chocolatey)
+**Windows (using Chocolatey):**
+```bash
 choco install k6
+```
 
-# Linux
+**Linux (Ubuntu/Debian):**
+```bash
 sudo gpg -k
 sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
 echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
@@ -21,174 +27,123 @@ sudo apt-get update
 sudo apt-get install k6
 ```
 
-### Verify Installation
-
+**Verify Installation:**
 ```bash
 k6 version
 ```
 
-## Configuration
+You should see output like: `k6 v0.x.x (date)`
 
-Edit `config.js` to configure:
-- **BASE_URL**: API base URL (default: `http://localhost:8091/api`)
-- **TEST_USER**: Test user credentials for authenticated endpoints
-- **Thresholds**: Performance thresholds for all tests
+### Step 2: Configure Test Settings
 
-### Environment Variables
+Edit `config.js` to set your API base URL and test credentials:
 
-You can override configuration using environment variables:
+```javascript
+// Default: http://localhost:8091
+export const BASE_URL = __ENV.BASE_URL || 'http://localhost:8091';
 
+// Test user credentials
+export const TEST_USER = {
+  email: __ENV.TEST_EMAIL || 'customer@practicesoftwaretesting.com',
+  password: __ENV.TEST_PASSWORD || 'welcome01',
+};
+```
+
+**Or use environment variables:**
 ```bash
 # Set custom base URL
-BASE_URL=http://localhost:8091/api k6 run 01-basic-api-test.js
+BASE_URL=https://api.example.com k6 run 06-load-test.js
 
 # Set custom test user
-TEST_EMAIL=user@example.com TEST_PASSWORD=password123 k6 run 02-authentication-test.js
+TEST_EMAIL=user@example.com TEST_PASSWORD=password123 k6 run 11-system-test.js
 ```
+
+### Step 3: Run Your First Test
+
+**Option 1: Using k6 directly**
+```bash
+# Run load test
+k6 run 06-load-test.js
+
+# Run system test
+k6 run 11-system-test.js
+```
+
+**Option 2: Using Makefile (Recommended - includes HTML reports)**
+```bash
+# Run load test with HTML report
+make load-test
+
+# Run spike test with HTML report
+make spike-test
+
+# Run stress test with HTML report
+make stress-test
+
+# Run system test with HTML report
+make system-test
+
+# Run all tests
+make all
+
+# View available commands
+make help
+```
+
+After running tests with Makefile, open the generated HTML report in your browser:
+```bash
+# macOS
+open load-test-report.html
+
+# Linux
+xdg-open load-test-report.html
+```
+
+---
 
 ## Test Scripts
 
-### 1. `01-basic-api-test.js` - Basic API Endpoints
-**Purpose**: Test core API endpoints (status, products, categories, brands)  
-**Load Pattern**: Ramp up to 50 concurrent users  
-**Duration**: ~4 minutes
+This project contains the following test scripts:
+
+### 1. `06-load-test.js` - Load Testing
+**Purpose**: Test system under normal expected load  
+**Load Pattern**: Multiple scenarios testing different endpoints separately  
+**Duration**: ~5 minutes per scenario
 
 ```bash
-k6 run 01-basic-api-test.js
+# Direct k6 command
+k6 run 06-load-test.js
+
+# Using Makefile (with HTML report)
+make load-test
 ```
 
 **Tests**:
 - API status endpoint
-- Products listing
-- Categories listing
-- Brands listing
+- Products endpoint
+- Categories endpoint
+- Brands endpoint
 - Product search
-
----
-
-### 2. `02-authentication-test.js` - Authentication Flow
-**Purpose**: Test user registration, login, and profile endpoints  
-**Load Pattern**: Ramp up to 20 concurrent users  
-**Duration**: ~4 minutes
-
-```bash
-k6 run 02-authentication-test.js
-```
-
-**Tests**:
-- User registration
-- User login
-- Get user profile
-- Refresh token
-
-**Note**: Requires valid test user credentials in `config.js`
-
----
-
-### 3. `03-products-test.js` - Products Endpoint Deep Dive
-**Purpose**: Comprehensive testing of product-related endpoints  
-**Load Pattern**: Ramp up to 60 concurrent users  
-**Duration**: ~4 minutes
-
-```bash
-k6 run 03-products-test.js
-```
-
-**Tests**:
-- Get all products
-- Get single product
-- Get related products
-- Search products
-
-**Custom Metrics**:
-- `product_response_time`: Response time trend
-- `product_errors`: Error rate
-
----
-
-### 4. `04-shopping-cart-test.js` - Shopping Cart Operations
-**Purpose**: Test shopping cart CRUD operations  
-**Load Pattern**: Ramp up to 20 concurrent users  
-**Duration**: ~4 minutes
-
-```bash
-k6 run 04-shopping-cart-test.js
-```
-
-**Tests**:
-- User login
-- Add item to cart
-- Get cart
-- Update item quantity
-- Remove item from cart (optional)
-
-**Note**: Requires authentication
-
----
-
-### 5. `05-full-journey-test.js` - Complete User Journey
-**Purpose**: Simulate a complete user shopping journey  
-**Load Pattern**: Ramp up to 40 concurrent users  
-**Duration**: ~5 minutes
-
-```bash
-k6 run 05-full-journey-test.js
-```
-
-**Journey Steps**:
-1. Check API status
-2. Browse products
-3. View categories
-4. View brands
-5. Search products
-6. View product details
-7. User login
-8. View user profile
-9. View favorites
-
----
-
-### 6. `06-load-test.js` - Load Testing
-**Purpose**: Test system under normal expected load  
-**Load Pattern**: Gradual ramp-up to 100 users, sustained load  
-**Duration**: ~11 minutes
-
-```bash
-k6 run 06-load-test.js
-```
+- Product details
+- Related products
 
 **Load Pattern**:
-- 1m: Ramp to 50 users
-- 3m: Ramp to 100 users
-- 5m: Stay at 100 users
-- 2m: Ramp down
+- Each endpoint tested separately with 20 concurrent users
+- 30s ramp-up, 4m30s sustained load, 10s ramp-down
 
 ---
 
-### 7. `07-stress-test.js` - Stress Testing
-**Purpose**: Find system breaking point by gradually increasing load  
-**Load Pattern**: Gradual increase from 10 to 300 users  
-**Duration**: ~9 minutes
-
-```bash
-k6 run 07-stress-test.js
-```
-
-**Load Pattern**:
-- Gradually increases from 10 → 50 → 100 → 150 → 200 → 250 → 300 users
-- Sustains at 300 users for 2 minutes
-
-**Note**: More lenient thresholds to identify breaking points
-
----
-
-### 8. `08-spike-test.js` - Spike Testing
+### 2. `07-spike-test.js` - Spike Testing
 **Purpose**: Test system response to sudden traffic spikes  
 **Load Pattern**: Sudden spikes from 10 to 100/150 users  
 **Duration**: ~4 minutes
 
 ```bash
-k6 run 08-spike-test.js
+# Direct k6 command
+k6 run 07-spike-test.js
+
+# Using Makefile (with HTML report)
+make spike-test
 ```
 
 **Load Pattern**:
@@ -201,56 +156,38 @@ k6 run 08-spike-test.js
 
 ---
 
-### 9. `09-endurance-test.js` - Endurance Testing
-**Purpose**: Test system stability over extended period (memory leaks, resource leaks)  
-**Load Pattern**: 20 users for 10 minutes  
-**Duration**: ~12 minutes
+### 3. `08-stress-test.js` - Stress Testing
+**Purpose**: Find system breaking point by gradually increasing load  
+**Load Pattern**: Gradual increase from 10 to 300 users  
+**Duration**: ~9 minutes
 
 ```bash
-k6 run 09-endurance-test.js
+# Direct k6 command
+k6 run 08-stress-test.js
+
+# Using Makefile (with HTML report)
+make stress-test
 ```
 
 **Load Pattern**:
-- 1m: Ramp to 20 users
-- 10m: Stay at 20 users
-- 1m: Ramp down
+- Gradually increases from 10 → 50 → 100 → 150 → 200 → 250 → 300 users
+- Sustains at 300 users for 2 minutes
 
-**Use Case**: Identify memory leaks, database connection leaks, etc.
-
----
-
-### 10. `10-reports-test.js` - Reports Endpoint Testing
-**Purpose**: Test report generation endpoints (resource-intensive)  
-**Load Pattern**: 10 concurrent users  
-**Duration**: ~4 minutes
-
-```bash
-k6 run 10-reports-test.js
-```
-
-**Tests**:
-- Total sales of years
-- Total sales per country
-- Top 10 purchased products
-- Top 10 best-selling categories
-- Customers by country
-- Average sales per month
-- Average sales per week
-
-**Note**: 
-- Requires authentication
-- May have rate limiting
-- More lenient thresholds due to resource-intensive nature
+**Note**: More lenient thresholds to identify breaking points
 
 ---
 
-### 11. `11-system-test.js` - Comprehensive System Testing
+### 4. `11-system-test.js` - Comprehensive System Testing
 **Purpose**: Complete end-to-end system testing with workflows, data validation, and integration testing  
 **Load Pattern**: 10 concurrent users  
 **Duration**: ~4 minutes
 
 ```bash
+# Direct k6 command
 k6 run 11-system-test.js
+
+# Using Makefile (with HTML report)
+make system-test
 ```
 
 **Tests**:
@@ -270,125 +207,41 @@ k6 run 11-system-test.js
 
 ---
 
-### 12. `12-system-test-simple.js` - Simple System Test
-**Purpose**: Basic system testing demonstration with single-user workflow  
-**Load Pattern**: 1 virtual user, 1 iteration  
-**Duration**: ~30 seconds
+## Configuration
 
-```bash
-k6 run 12-system-test-simple.js
-```
+### Base URL Configuration
 
-**Tests**:
-- API health check
-- Product browsing workflow
-- Product details retrieval
-- Error handling
-- Integration testing (categories, search)
+The default base URL is `http://localhost:8091`. You can change it in two ways:
 
-**Use Case**: Quick system verification, CI/CD integration
-
----
-
-## k6 for System Testing
-
-### Can k6 be used for System Testing?
-
-**Yes!** k6 is excellent for API-level system testing. Here's what it can do:
-
-#### ✅ What k6 CAN do for System Testing:
-
-1. **End-to-End Workflows**: Test complete user journeys across multiple endpoints
-2. **Integration Testing**: Verify services work together correctly
-3. **Data Validation**: Check response data structure, types, and values
-4. **Data Consistency**: Verify data consistency across related endpoints
-5. **Error Scenarios**: Test error handling and edge cases
-6. **API Contract Testing**: Validate API responses match expected schemas
-7. **Workflow Orchestration**: Chain multiple API calls in realistic scenarios
-8. **Business Logic Testing**: Test complete business workflows via APIs
-
-#### ❌ What k6 CANNOT do:
-
-1. **UI Testing**: No browser automation (use Playwright, Selenium, Cypress)
-2. **Visual Testing**: No screenshot comparison or visual regression
-3. **JavaScript Execution**: Cannot test client-side JavaScript
-4. **File System Operations**: Limited file system testing capabilities
-
-### System Testing Best Practices with k6
-
-1. **Use Checks Extensively**: Validate not just status codes, but response data
-2. **Test Data Consistency**: Verify data from one endpoint matches related endpoints
-3. **Test Error Scenarios**: Include negative test cases
-4. **Chain Requests**: Use responses from one request in subsequent requests
-5. **Use Custom Metrics**: Track system-specific metrics (workflows passed/failed)
-6. **Test Integration Points**: Verify different services/components work together
-7. **Validate Business Rules**: Test complete business workflows, not just endpoints
-
-### Example System Test Patterns
-
+**Method 1: Edit `config.js`**
 ```javascript
-// Pattern 1: Complete Workflow
-export default function() {
-  // Step 1: Register user
-  const registerResponse = http.post('/users/register', ...);
-  const userId = JSON.parse(registerResponse.body).id;
-  
-  // Step 2: Login
-  const loginResponse = http.post('/users/login', ...);
-  const token = JSON.parse(loginResponse.body).access_token;
-  
-  // Step 3: Use authenticated endpoint
-  const profileResponse = http.get('/users/me', {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-  
-  // Step 4: Verify data consistency
-  check(profileResponse, {
-    'user id matches': (r) => {
-      const body = JSON.parse(r.body);
-      return body.id === userId;
-    }
-  });
-}
-
-// Pattern 2: Data Consistency Testing
-export default function() {
-  // Get list
-  const listResponse = http.get('/products');
-  const productId = JSON.parse(listResponse.body).data[0].id;
-  
-  // Get detail
-  const detailResponse = http.get(`/products/${productId}`);
-  
-  // Verify consistency
-  check(detailResponse, {
-    'product matches list': (r) => {
-      const listBody = JSON.parse(listResponse.body);
-      const detailBody = JSON.parse(r.body);
-      return listBody.data[0].name === detailBody.name;
-    }
-  });
-}
-
-// Pattern 3: Integration Testing
-export default function() {
-  // Create cart
-  const cartResponse = http.post('/carts', ...);
-  const cartId = JSON.parse(cartResponse.body).id;
-  
-  // Add product
-  http.post(`/carts/${cartId}`, { product_id: '123', quantity: 1 });
-  
-  // Verify cart
-  const getCartResponse = http.get(`/carts/${cartId}`);
-  check(getCartResponse, {
-    'cart contains product': (r) => {
-      const body = JSON.parse(r.body);
-      return body.items.some(item => item.product_id === '123');
-    }
-  });
-}
+export const BASE_URL = __ENV.BASE_URL || 'http://your-api-url.com';
 ```
+
+**Method 2: Use environment variable**
+```bash
+BASE_URL=https://api.example.com k6 run 06-load-test.js
+```
+
+### Test User Credentials
+
+Default test user credentials are set in `config.js`:
+- Email: `customer@practicesoftwaretesting.com`
+- Password: `welcome01`
+
+**Override with environment variables:**
+```bash
+TEST_EMAIL=user@example.com TEST_PASSWORD=password123 k6 run 11-system-test.js
+```
+
+### Performance Thresholds
+
+Default thresholds are defined in `config.js`:
+- `http_req_duration`: p(95) < 500ms, p(99) < 1000ms
+- `http_req_failed`: rate < 0.01 (less than 1% errors)
+- `checks`: rate > 0.95 (95% of checks should pass)
+
+You can modify these in `config.js` or override them in individual test files.
 
 ---
 
@@ -428,83 +281,39 @@ vus............................: 50     min=0    max=50
 - ✅ Stable throughput (16.67 req/s)
 - ✅ Consistent virtual users (50)
 
-## Customizing Tests
-
-### Adjust Load Pattern
-
-Edit the `stages` array in `options`:
-
-```javascript
-stages: [
-  { duration: '30s', target: 20 },  // Ramp up to 20 users in 30s
-  { duration: '1m', target: 50 },    // Ramp up to 50 users in 1m
-  { duration: '2m', target: 50 },   // Stay at 50 users for 2m
-  { duration: '30s', target: 0 },   // Ramp down to 0 in 30s
-],
-```
-
-### Adjust Thresholds
-
-Edit the `thresholds` object:
-
-```javascript
-thresholds: {
-  http_req_duration: ['p(95)<500'],  // 95% should be < 500ms
-  http_req_failed: ['rate<0.01'],    // Error rate < 1%
-  checks: ['rate>0.95'],             // 95% of checks should pass
-},
-```
-
-### Change Target URL
-
-Update `config.js` or use environment variable:
-
-```bash
-BASE_URL=http://localhost:8091/api k6 run 01-basic-api-test.js
-```
+---
 
 ## Generating Reports
 
-Use k6's built-in report generation via command line options.
+### Using Makefile (Recommended)
 
-### Report Formats
-
-k6 supports multiple output formats for reports:
-
-1. **HTML Report** - Visual, interactive report with charts and metrics
-2. **JSON Report** - Machine-readable report for automation
-3. **Cloud Output** - Send results to k6 Cloud
-4. **InfluxDB** - Send results to InfluxDB for time-series analysis
-5. **StatsD** - Send metrics to StatsD-compatible services
-
-For more output options, see [k6 Results Output](https://k6.io/docs/results-visualization/).
-
-### Running Tests and Generating Reports
-
-Use k6's built-in report generation via command line:
+The Makefile automatically generates HTML reports:
 
 ```bash
-# Run test with HTML report output
-k6 run --out html=report.html 12-system-test-simple.js
+# Run test and generate HTML report
+make load-test
 
-# Run test with JSON report output
-k6 run --out json=report.json 12-system-test-simple.js
-
-# Run test with multiple output formats
-k6 run --out html=report.html --out json=report.json 12-system-test-simple.js
+# Open the report
+open load-test-report.html
 ```
 
-### Viewing Reports
+### Using k6 Directly
 
+**HTML Report:**
 ```bash
-# Open HTML report in browser
-open report.html
+# For system test (requires k6-to-html)
+k6 run --summary-export=summary.json 11-system-test.js
+npx --yes k6-to-html summary.json -o report.html
+```
 
-# Or on Linux
-xdg-open report.html
+**JSON Report:**
+```bash
+k6 run --summary-export=summary.json 06-load-test.js
+```
 
-# View JSON report
-cat report.json
+**View JSON report:**
+```bash
+cat summary.json
 ```
 
 ### Report Contents
@@ -519,49 +328,104 @@ The HTML report includes:
 
 ## Running Multiple Tests
 
-### Run All Tests Sequentially
+### Using Makefile
+
+```bash
+# Run all tests sequentially with HTML reports
+make all
+```
+
+### Using k6 Directly
 
 ```bash
 # Run all tests sequentially
-for test in *.js; do
-  if [[ "$test" != "config.js" ]]; then
-    echo "Running $test..."
-    k6 run "$test"
-    echo "---"
-  fi
+for test in 06-load-test.js 07-spike-test.js 08-stress-test.js 11-system-test.js; do
+  echo "Running $test..."
+  k6 run "$test"
+  echo "---"
 done
 ```
 
-### Run Specific Test Categories
+### Run Specific Tests
 
 ```bash
-# Run only basic tests
-k6 run 01-basic-api-test.js
-k6 run 03-products-test.js
-
 # Run only load/stress tests
 k6 run 06-load-test.js
-k6 run 07-stress-test.js
-k6 run 08-spike-test.js
+k6 run 08-stress-test.js
+
+# Run system test
+k6 run 11-system-test.js
 ```
+
+---
+
+## Customizing Tests
+
+### Adjust Load Pattern
+
+Edit the `stages` array in test file's `options`:
+
+```javascript
+stages: [
+  { duration: '30s', target: 20 },  // Ramp up to 20 users in 30s
+  { duration: '1m', target: 50 },    // Ramp up to 50 users in 1m
+  { duration: '2m', target: 50 },   // Stay at 50 users for 2m
+  { duration: '30s', target: 0 },   // Ramp down to 0 in 30s
+],
+```
+
+### Adjust Thresholds
+
+Edit the `thresholds` object in test file or use `COMMON_THRESHOLDS` from `config.js`:
+
+```javascript
+thresholds: {
+  http_req_duration: ['p(95)<500'],  // 95% should be < 500ms
+  http_req_failed: ['rate<0.01'],    // Error rate < 1%
+  checks: ['rate>0.95'],             // 95% of checks should pass
+},
+```
+
+### Change Target URL
+
+**Method 1: Update `config.js`**
+```javascript
+export const BASE_URL = 'https://api.example.com';
+```
+
+**Method 2: Use environment variable**
+```bash
+BASE_URL=https://api.example.com k6 run 06-load-test.js
+```
+
+**Method 3: Use Makefile**
+```bash
+BASE_URL=https://api.example.com make load-test
+```
+
+---
 
 ## Best Practices
 
-1. **Start Small**: Begin with basic tests before running stress tests
+1. **Start Small**: Begin with system test before running stress tests
 2. **Monitor Resources**: Watch server CPU, memory, and database connections during tests
 3. **Test Locally First**: Test against local environment before production
 4. **Set Realistic Thresholds**: Adjust thresholds based on your SLA requirements
 5. **Review Logs**: Check API logs for errors and warnings
 6. **Gradual Increase**: Don't jump directly to high load; use gradual ramp-up
+7. **Use HTML Reports**: Generate and review HTML reports for detailed analysis
+
+---
 
 ## Troubleshooting
 
 ### Connection Errors
 
 - Check if API server is running
-- Verify BASE_URL in `config.js`
+- Verify BASE_URL in `config.js` or environment variable
 - Check firewall/network settings
 - Ensure Docker containers are up (if using local setup)
+- Test connectivity: `curl http://localhost:8091/status`
 
 ### High Error Rates
 
@@ -569,6 +433,7 @@ k6 run 08-spike-test.js
 - Check rate limiting on target server
 - Reduce load if testing production
 - Review API logs for errors
+- Check if test user credentials are correct
 
 ### Slow Response Times
 
@@ -576,6 +441,7 @@ k6 run 08-spike-test.js
 - Use local environment for faster results
 - Check database query performance
 - Review server resource usage (CPU, memory)
+- Consider network latency if testing remote servers
 
 ### Authentication Failures
 
@@ -583,6 +449,31 @@ k6 run 08-spike-test.js
 - Check if test user exists in database
 - Ensure JWT token is being extracted correctly
 - Review authentication middleware logs
+- Test login manually: `curl -X POST http://localhost:8091/users/login -d '{"email":"...","password":"..."}'`
+
+### k6 Installation Issues
+
+**macOS:**
+```bash
+# If brew install fails, try:
+brew update
+brew install k6
+```
+
+**Linux:**
+```bash
+# If GPG key import fails, try alternative:
+curl https://github.com/grafana/k6/releases/download/v0.47.0/k6-v0.47.0-linux-amd64.tar.gz -L | tar xvz
+sudo mv k6-v0.47.0-linux-amd64/k6 /usr/local/bin/
+```
+
+**Windows:**
+```bash
+# Alternative: Download from https://github.com/grafana/k6/releases
+# Extract and add to PATH
+```
+
+---
 
 ## API Endpoints Tested
 
@@ -605,11 +496,24 @@ k6 run 08-spike-test.js
 - `POST /carts/{id}` - Add to cart
 - `GET /carts/{id}` - Get cart
 - `PUT /carts/{id}/product/quantity` - Update quantity
-- `GET /reports/*` - Various reports
+
+---
 
 ## File Structure
 
-- **`.gitignore`** - Ignores the `reports/` directory in git
+```
+.
+├── config.js                 # Shared configuration for all tests
+├── 06-load-test.js          # Load testing script
+├── 07-spike-test.js         # Spike testing script
+├── 08-stress-test.js        # Stress testing script
+├── 11-system-test.js        # System testing script
+├── Makefile                 # Convenience commands for running tests
+├── README.md                # This file
+└── *.html, *.json          # Generated test reports (gitignored)
+```
+
+---
 
 ## Resources
 
@@ -620,11 +524,13 @@ k6 run 08-spike-test.js
 - [k6 Scenarios](https://k6.io/docs/using-k6/scenarios/)
 - [k6 Results Output](https://k6.io/docs/results-visualization/)
 
+---
+
 ## Notes
 
-- All tests use the `/api` prefix by default
+- Default base URL is `http://localhost:8091` (no `/api` prefix)
 - Authentication tests require valid test user credentials
-- Report tests may be rate-limited
 - Some tests may fail if test data is not available (e.g., no products in database)
 - Adjust thresholds based on your performance requirements
-
+- HTML reports are generated automatically when using Makefile
+- Test reports (`.html`, `.json`) are gitignored
