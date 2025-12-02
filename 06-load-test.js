@@ -6,16 +6,16 @@ import { COMMON_HEADERS, getUrl, COMMON_THRESHOLDS } from './config.js';
 export const options = {
   scenarios: {
     // Test /status endpoint separately
-    // status_endpoint: {
-    //   executor: 'ramping-vus',
-    //   startVUs: 0,
-    //   stages: [
-    //     { duration: '30s', target: 20 },  // Ramp up
-    //     { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
-    //     { duration: '10s', target: 0 }, // Optional ramp-down
-    //   ],
-    //   exec: 'testStatus',
-    // },
+    status_endpoint: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '30s', target: 20 },  // Ramp up
+        { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+        { duration: '10s', target: 0 }, // Optional ramp-down
+      ],
+      exec: 'testStatus',
+    },
     // Test /products endpoint separately
     products_endpoint: {
       executor: 'ramping-vus',
@@ -27,50 +27,50 @@ export const options = {
       ],
       exec: 'testProducts',
     },
-    // Test /categories endpoint separately
-  //   categories_endpoint: {
-  //     executor: 'ramping-vus',
-  //     startVUs: 0,
-  //     stages: [
-  //       { duration: '30s', target: 20 },  // Ramp up
-  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
-  //       { duration: '10s', target: 0 }, // Optional ramp-down
-  //     ],
-  //     exec: 'testCategories',
-  //   },
-  //   // Test /brands endpoint separately
-  //   brands_endpoint: {
-  //     executor: 'ramping-vus',
-  //     startVUs: 0,
-  //     stages: [
-  //       { duration: '30s', target: 20 },  // Ramp up
-  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
-  //       { duration: '10s', target: 0 }, // Optional ramp-down
-  //     ],
-  //     exec: 'testBrands',
-  //   },
-  //   // Test /users/register endpoint separately
-  //   register_endpoint: {
-  //     executor: 'ramping-vus',
-  //     startVUs: 0,
-  //     stages: [
-  //       { duration: '30s', target: 20 },  // Ramp up
-  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
-  //       { duration: '10s', target: 0 }, // Optional ramp-down
-  //     ],
-  //     exec: 'testRegister',
-  //   },
-  //   // Test /users/login endpoint separately
-  //   login_endpoint: {
-  //     executor: 'ramping-vus',
-  //     startVUs: 0,
-  //     stages: [
-  //       { duration: '30s', target: 20 },  // Ramp up
-  //       { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
-  //       { duration: '10s', target: 0 }, // Optional ramp-down
-  //     ],
-  //     exec: 'testLogin',
-  //   },
+    //Test /categories endpoint separately
+    categories_endpoint: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '30s', target: 20 },  // Ramp up
+        { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+        { duration: '10s', target: 0 }, // Optional ramp-down
+      ],
+      exec: 'testCategories',
+    },
+    // Test /brands endpoint separately
+    brands_endpoint: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '30s', target: 20 },  // Ramp up
+        { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+        { duration: '10s', target: 0 }, // Optional ramp-down
+      ],
+      exec: 'testBrands',
+    },
+    // Test /users/register endpoint separately
+    register_endpoint: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '30s', target: 20 },  // Ramp up
+        { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+        { duration: '10s', target: 0 }, // Optional ramp-down
+      ],
+      exec: 'testRegister',
+    },
+    // Test /users/login endpoint separately
+    login_endpoint: {
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '30s', target: 20 },  // Ramp up
+        { duration: '4m30s', target: 20 }, // Keep 20 VU (total = 5m)
+        { duration: '10s', target: 0 }, // Optional ramp-down
+      ],
+      exec: 'testLogin',
+    },
   },
   thresholds: {
     ...COMMON_THRESHOLDS,
